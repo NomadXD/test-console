@@ -81,7 +81,7 @@ app.post("/api/token", async (req, res) => {
 app.use(express.static(join(__dirname, "dist")));
 
 // Fallback to index.html for SPA routing
-app.get("*", (req, res) => {
+app.get("*path", (req, res) => {
   res.sendFile(join(__dirname, "dist", "index.html"));
 });
 
