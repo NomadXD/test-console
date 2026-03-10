@@ -1,5 +1,10 @@
 import express from "express";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 app.use(cors());
@@ -72,6 +77,15 @@ app.post("/api/token", async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log("Proxy server running on http://localhost:3001");
+// Serve static files from the Vite build output
+app.use(express.static(join(__dirname, "dist")));
+
+// Fallback to index.html for SPA routing
+app.get("*", (req, res) => {
+  res.sendFile(join(__dirname, "dist", "index.html"));
+});
+
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
